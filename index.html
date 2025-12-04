@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  #quiz-container {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #aaa;
+    width: 100%;
+    max-width: 500px;
+  }
+  h2 {
+    margin-bottom: 20px;
+  }
+  .option {
+    display: block;
+    background: #e0e0e0;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .option:hover {
+    background: #c0c0c0;
+  }
+  #submit {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  #submit:hover {
+    background: #45a049;
+  }
+  #result {
+    font-size: 20px;
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div id="quiz-container">
+  <h2 id="question">Question will appear here</h2>
+  <div id="options">
+    <!-- Options will be generated here -->
+  </div>
+  <button id="submit">Next</button>
+  <div id="result"></div>
+</div>
+
+<script>
+const quizData = [
+  {
+    question: "What is the full form of CPU?",
+    options: ["Central Processing Unit", "Control Processing Unit", "Central Programming Unit", "Control Program Unit"],
+    answer: "Central Processing Unit"
+  },
+  {
+    question: "Which bus carries data?",
+    options: ["Data Bus", "Address Bus", "Control Bus", "Power Bus"],
+    answer: "Data Bus"
+  },
+  {
+    question: "Which memory is volatile?",
+    options: ["RAM", "ROM", "Flash", "EPROM"],
+    answer: "RAM"
+  },
+  {
+    question: "Von Neumann architecture uses:",
+    options: ["Single memory for data & instructions", "Separate memory for data & instructions", "No memory", "Cache memory only"],
+    answer: "Single memory for data & instructions"
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const submitBtn = document.getElementById("submit");
+const resultEl = document.getElementById("result");
+
+function loadQuestion() {
+  const q = quizData[currentQuestion];
+  questionEl.innerText = q.question;
+  optionsEl.innerHTML = "";
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.innerText = option;
+    btn.onclick = () => selectAnswer(option);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(selected) {
+  const correct = quizData[currentQuestion].answer;
+  if (selected === correct) score++;
+  currentQuestion++;
+  if (currentQuestion < quizData.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  questionEl.style.display = "none";
+  optionsEl.style.display = "none";
+  submitBtn.style.display = "none";
+  resultEl.innerText = `Quiz Completed! Your Score: ${score} / ${quizData.length}`;
+}
+
+// Initially load the first question
+loadQuestion();
+
+submitBtn.addEventListener("click", () => {
+  // Do nothing here, next question is handled on option click
+});
+</script>
+
+</body>
+</html>
